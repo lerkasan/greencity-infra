@@ -1,0 +1,9 @@
+.env
+*.env
+env_file
+google-creds.json
+secret.yml
+secrets.auto.tfvars
+.terraform.lock.hcl
+.terraform
+.directory
