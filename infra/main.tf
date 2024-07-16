@@ -127,7 +127,7 @@ module "greencity_rds" {
   database_backup_window             = var.database_backup_window
   database_subnet_group              = module.vpc.database_subnet_group
   database_cloudwatch_logs_exports   = var.database_cloudwatch_logs_exports
-  eks_worker_nodes_security_group_id = module.custom_eks.eks_worker_nodes_security_group_id
+#   eks_worker_nodes_security_group_id = module.custom_eks.eks_worker_nodes_security_group_id
   project_name                       = var.project_name
   environment                        = var.environment
 }
@@ -150,7 +150,7 @@ module "sonarqube_rds" {
   database_backup_window             = var.database_backup_window
   database_subnet_group              = module.vpc.database_subnet_group
   database_cloudwatch_logs_exports   = var.database_cloudwatch_logs_exports
-  eks_worker_nodes_security_group_id = module.custom_eks.eks_worker_nodes_security_group_id
+#   eks_worker_nodes_security_group_id = module.custom_eks.eks_worker_nodes_security_group_id
   project_name                       = "greencity_sonarqube"
   environment                        = var.environment
 }
