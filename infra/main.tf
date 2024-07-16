@@ -92,22 +92,22 @@ module "vpc" {
 #   environment = var.environment
 # }
 
-module "custom_eks" {
-  source = "./eks"
+# module "custom_eks" {
+#   source = "./eks"
 
-  eks_cluster_name        = var.eks_cluster_name
-  eks_cluster_version     = var.eks_cluster_version
-  eks_node_ami_type       = var.eks_node_ami_type
-  eks_node_disk_size      = var.eks_node_disk_size
-  eks_node_instance_types = var.eks_node_instance_types
-  eks_node_groups_config  = var.eks_node_groups_config
-  eks_admin_iamrole_name  = var.eks_admin_iamrole_name
-  #   k8s_namespaces = var.k8s_namespaces
-  vpc_id                 = module.vpc.vpc_id
-  vpc_private_subnet_ids = module.vpc.private_subnets
-  project_name           = var.project_name
-  environment            = var.environment
-}
+#   eks_cluster_name        = var.eks_cluster_name
+#   eks_cluster_version     = var.eks_cluster_version
+#   eks_node_ami_type       = var.eks_node_ami_type
+#   eks_node_disk_size      = var.eks_node_disk_size
+#   eks_node_instance_types = var.eks_node_instance_types
+#   eks_node_groups_config  = var.eks_node_groups_config
+#   eks_admin_iamrole_name  = var.eks_admin_iamrole_name
+#   #   k8s_namespaces = var.k8s_namespaces
+#   vpc_id                 = module.vpc.vpc_id
+#   vpc_private_subnet_ids = module.vpc.private_subnets
+#   project_name           = var.project_name
+#   environment            = var.environment
+# }
 
 module "greencity_rds" {
   source                             = "./rds"
@@ -464,61 +464,61 @@ resource "aws_ssm_parameter" "argocd_repo_password" {
 #   }
 # }
 
-module "eks_extra" {
-  source = "./eks_extra"
+# module "eks_extra" {
+#   source = "./eks_extra"
 
-  cluster_name      = var.eks_cluster_name
-  k8s_namespaces    = var.k8s_namespaces
-  domain_name       = var.domain_name
-  oidc_provider_arn = module.custom_eks.oidc_provider_arn
-  parameter_arns = [
-    aws_ssm_parameter.database_host.arn,
-    aws_ssm_parameter.database_name.arn,
-    aws_ssm_parameter.database_username.arn,
-    aws_ssm_parameter.database_password.arn,
-    aws_ssm_parameter.google_creds_json.arn,
-    aws_ssm_parameter.api_key.arn,
-    aws_ssm_parameter.api_secret.arn,
-    aws_ssm_parameter.azure_connection_string.arn,
-    aws_ssm_parameter.email_address.arn,
-    aws_ssm_parameter.email_password.arn,
-    aws_ssm_parameter.google_api_key.arn,
-    aws_ssm_parameter.google_client_id.arn,
-    aws_ssm_parameter.google_client_id_manager.arn,
-    aws_ssm_parameter.token_key.arn,
-    aws_ssm_parameter.argocd_repo_url.arn,
-    aws_ssm_parameter.argocd_repo_username.arn,
-    aws_ssm_parameter.argocd_repo_password.arn
-  ]
-  kms_key_arns = [aws_kms_key.ssm_param_encrypt_key.arn]
+#   cluster_name      = var.eks_cluster_name
+#   k8s_namespaces    = var.k8s_namespaces
+#   domain_name       = var.domain_name
+#   oidc_provider_arn = module.custom_eks.oidc_provider_arn
+#   parameter_arns = [
+#     aws_ssm_parameter.database_host.arn,
+#     aws_ssm_parameter.database_name.arn,
+#     aws_ssm_parameter.database_username.arn,
+#     aws_ssm_parameter.database_password.arn,
+#     aws_ssm_parameter.google_creds_json.arn,
+#     aws_ssm_parameter.api_key.arn,
+#     aws_ssm_parameter.api_secret.arn,
+#     aws_ssm_parameter.azure_connection_string.arn,
+#     aws_ssm_parameter.email_address.arn,
+#     aws_ssm_parameter.email_password.arn,
+#     aws_ssm_parameter.google_api_key.arn,
+#     aws_ssm_parameter.google_client_id.arn,
+#     aws_ssm_parameter.google_client_id_manager.arn,
+#     aws_ssm_parameter.token_key.arn,
+#     aws_ssm_parameter.argocd_repo_url.arn,
+#     aws_ssm_parameter.argocd_repo_username.arn,
+#     aws_ssm_parameter.argocd_repo_password.arn
+#   ]
+#   kms_key_arns = [aws_kms_key.ssm_param_encrypt_key.arn]
 
-  datadog_api_key = var.datadog_api_key
-  datadog_site    = var.datadog_site
+#   datadog_api_key = var.datadog_api_key
+#   datadog_site    = var.datadog_site
 
-  grafana_admin_user     = var.grafana_admin_user
-  grafana_admin_password = var.grafana_admin_password
+#   grafana_admin_user     = var.grafana_admin_user
+#   grafana_admin_password = var.grafana_admin_password
 
-  #   sonarqube_domain_name = var.sonarqube_domain_name
-  #   sonarqube_ssl_certificate_arn = var.sonarqube_ssl_certificate_arn
-  sonarqube_db_instance_address = module.sonarqube_rds.db_instance_address
-  sonarqube_database_name       = var.sonarqube_database_name
-  sonarqube_database_username   = var.sonarqube_database_username
-  sonarqube_database_password   = var.sonarqube_database_password
+#   #   sonarqube_domain_name = var.sonarqube_domain_name
+#   #   sonarqube_ssl_certificate_arn = var.sonarqube_ssl_certificate_arn
+#   sonarqube_db_instance_address = module.sonarqube_rds.db_instance_address
+#   sonarqube_database_name       = var.sonarqube_database_name
+#   sonarqube_database_username   = var.sonarqube_database_username
+#   sonarqube_database_password   = var.sonarqube_database_password
 
-  #   artifactory_database_password = var.artifactory_database_password
+#   #   artifactory_database_password = var.artifactory_database_password
 
-  #   nexus_db_instance_address = module.nexus_rds.db_instance_address
-  #   nexus_database_name = var.nexus_database_name
-  #   nexus_database_username = var.nexus_database_username
-  #   nexus_database_password = var.nexus_database_password
-  #   artifactory_domain_name         = var.artifactory_domain_name
-  #   artifactory_ssl_certificate_arn = var.artifactory_ssl_certificate_arn
-  #   nexus_ui_password = var.nexus_ui_password
+#   #   nexus_db_instance_address = module.nexus_rds.db_instance_address
+#   #   nexus_database_name = var.nexus_database_name
+#   #   nexus_database_username = var.nexus_database_username
+#   #   nexus_database_password = var.nexus_database_password
+#   #   artifactory_domain_name         = var.artifactory_domain_name
+#   #   artifactory_ssl_certificate_arn = var.artifactory_ssl_certificate_arn
+#   #   nexus_ui_password = var.nexus_ui_password
 
-  #   depends_on = [ module.custom_eks.cluster_name]
-  depends_on = [module.custom_eks
-    #  ,
-    #  module.sonarqube_rds
-  ]
-  #   depends_on = [ module.custom_eks.eks_managed_node_groups ]
-}
+#   #   depends_on = [ module.custom_eks.cluster_name]
+#   depends_on = [module.custom_eks
+#     #  ,
+#     #  module.sonarqube_rds
+#   ]
+#   #   depends_on = [ module.custom_eks.eks_managed_node_groups ]
+# }
