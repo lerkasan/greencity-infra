@@ -75,3 +75,22 @@ variable "greencity_frontend_chart_name" {
   type        = string
   default     = "greencity-frontend"
 }
+
+variable "artifactory_database_password" {
+  description   = "Artifactory database password"
+  type          = string
+  default       = ""
+  sensitive     = true
+}
+
+variable "artifactory_domain_name" {
+  description   = "Nexus domain name"
+  type          = string
+  default       = ""
+}
+
+variable "artifactory_ssl_certificate_arn" {
+  description   = "nexus SSL Certificate ARN"
+  type          = string
+  default       = ""
+}

@@ -8,3 +8,4 @@ secrets.auto.tfvars
 .terraform
 .directory
 .infracost
+*.tfstate

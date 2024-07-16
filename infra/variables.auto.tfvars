@@ -67,8 +67,8 @@ sonarqube_rds_name = "sonar"
 
 # sonarqube_domain_name = "sonar.lerkasan.net"
 # sonarqube_ssl_certificate_arn = "arn:aws:acm:us-east-1:084912621610:certificate/feef84f4-f358-4ccb-88e1-a5d24ebd1da6"
-artifactory_domain_name          = "artifactory.lerkasan.net"
-artifactory_ssl_certificate_arn  = "arn:aws:acm:us-east-1:084912621610:certificate/062578ed-1924-40d6-ba48-8e2bc3444e14"
+# artifactory_domain_name          = "artifactory.lerkasan.net"
+# artifactory_ssl_certificate_arn  = "arn:aws:acm:us-east-1:084912621610:certificate/062578ed-1924-40d6-ba48-8e2bc3444e14"
 database_engine                  = "postgres"
 database_engine_version          = "16"
 database_port                    = 5432

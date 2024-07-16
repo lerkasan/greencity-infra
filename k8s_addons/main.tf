@@ -367,4 +367,92 @@ resource "kubernetes_manifest" "grafana_ingress" {
   }
 }
 
+resource "helm_release" "artifactory" {
 
+  name = "artifactory"
+
+  repository = "https://charts.jfrog.io"
+  chart      = "artifactory-oss"
+  namespace  = "artifactory-oss"
+  version    = "107.84.16"
+
+  create_namespace = true
+
+  set {
+    name  = "artifactory.postgresql.postgresqlPassword"
+    value = var.artifactory_database_password
+  }
+
+  set {
+    name  = "artifactory.nginx.enabled"
+    value = "false"
+  }
+
+  set {
+    name  = "artifactory.ingress.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "artifactory.ingress.hosts[0]"
+    value = var.artifactory_domain_name
+  }
+
+  set {
+    name  = "artifactory.ingress.tls[0].hosts[0]"
+    value = var.artifactory_domain_name
+  }
+
+  set {
+    name  = "artifactory.ingress.className"
+    value = "alb"
+  }
+
+  set {
+    name  = "artifactory.artifactory.service.type"
+    value = "NodePort"
+  }
+
+  set {
+    name = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/load-balancer-name"
+    value = "artifactory-ingress-alb"
+  }
+
+  set {
+    name = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/target-type"
+    value = "ip"
+  }
+
+  set {
+    name = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/scheme"
+    value = "internet-facing"
+  }
+
+  set {
+    name = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/backend-protocol"
+    value = "HTTP"
+  }
+
+  set {
+    name = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/listen-ports"
+    value = "[{\"HTTPS\":443}]"
+	# value = "[{\"HTTP\":9000}, {\"HTTPS\":443}]"
+  }
+
+#   set {
+#     name = "ingress.annotations.alb\\.ingress\\.kubernetes\\.io/ssl-redirect"
+#     value = "443"
+#   }
+
+  set {
+    name = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/certificate-arn"
+    value = var.artifactory_ssl_certificate_arn
+  }
+
+  set {
+    name = "artifactory.ingress.annotations.external-dns\\.alpha\\.kubernetes\\.io/hostname"
+    value = var.artifactory_domain_name
+  }
+
+  depends_on = [ kubernetes_annotations.default-storageclass ]
+}

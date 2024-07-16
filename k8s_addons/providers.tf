@@ -25,7 +25,26 @@ provider "kubernetes" {
 
   exec {
     api_version = "client.authentication.k8s.io/v1beta1"
-    args        = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.default.id] #, "--region", var.aws_region] # module.custom_eks.cluster_name] # data.aws_eks_cluster.default.id] #, "--profile", "eks-admin" ]
+    args        = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.default.id, "--region", var.aws_region] #, "--region", var.aws_region] # module.custom_eks.cluster_name] # data.aws_eks_cluster.default.id] #, "--profile", "eks-admin" ]
     command     = "aws"
+  }
+}
+
+provider "helm" {
+  kubernetes {
+    # config_path = "~/.kube/config"
+    # host                   = module.custom_eks.cluster_endpoint # data.aws_eks_cluster.default.endpoint
+    # cluster_ca_certificate = base64decode(module.custom_eks.cluster_certificate_authority_data)
+    # host                   = data.aws_eks_cluster.default.endpoint
+    host = data.aws_eks_cluster.default.endpoint
+    # cluster_ca_certificate = base64decode(data.aws_eks_cluster.default.certificate_authority[0].data)
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.default.certificate_authority[0].data)
+
+    exec {
+      api_version = "client.authentication.k8s.io/v1beta1"
+      #   args        = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.default.id, "--region", var.aws_region] # module.custom_eks.cluster_name] #var.eks_cluster_name] # data.aws_eks_cluster.default.id] #, "--profile", "eks-admin"]
+      args    = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.default.id, "--region", var.aws_region] # module.custom_eks.cluster_name] #var.eks_cluster_name] # data.aws_eks_cluster.default.id] #, "--profile", "eks-admin"]
+      command = "aws"
+    }
   }
 }
