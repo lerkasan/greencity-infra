@@ -35,9 +35,9 @@
 # }
 
 module "vpc" {
-  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=25322b6b6be69db6cca7f167d7b0e5327156a595"   # commit hash for version 5.8.1
-#   source  = "terraform-aws-modules/vpc/aws"
-#   version = "5.8.1"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=25322b6b6be69db6cca7f167d7b0e5327156a595" # commit hash for version 5.8.1
+  #   source  = "terraform-aws-modules/vpc/aws"
+  #   version = "5.8.1"
 
   name = var.vpc_name
   cidr = var.vpc_cidr
@@ -50,7 +50,7 @@ module "vpc" {
   public_subnet_tags = {
     "kubernetes.io/role/elb" = "1"
   }
-  
+
   private_subnet_tags = {
     "kubernetes.io/role/internal-elb" = "1"
   }
@@ -61,15 +61,15 @@ module "vpc" {
   create_redshift_subnet_group    = false
 
   enable_nat_gateway     = true
-  single_nat_gateway     = true  	#
-  one_nat_gateway_per_az = false 	#
+  single_nat_gateway     = true  #
+  one_nat_gateway_per_az = false #
 
   enable_dns_hostnames = true
   enable_dns_support   = true
 
-#   enable_flow_log = true
-#   create_flow_log_cloudwatch_log_group = true
-#   flow_log_destination_type = "cloud-watch-logs"
+  #   enable_flow_log = true
+  #   create_flow_log_cloudwatch_log_group = true
+  #   flow_log_destination_type = "cloud-watch-logs"
 
   tags = {
     Name        = join("_", [var.project_name, "_vpc"])
@@ -95,64 +95,64 @@ module "vpc" {
 module "custom_eks" {
   source = "./eks"
 
-  eks_cluster_name = var.eks_cluster_name
-  eks_cluster_version = var.eks_cluster_version
-  eks_node_ami_type = var.eks_node_ami_type
-  eks_node_disk_size = var.eks_node_disk_size
+  eks_cluster_name        = var.eks_cluster_name
+  eks_cluster_version     = var.eks_cluster_version
+  eks_node_ami_type       = var.eks_node_ami_type
+  eks_node_disk_size      = var.eks_node_disk_size
   eks_node_instance_types = var.eks_node_instance_types
-  eks_node_groups_config = var.eks_node_groups_config
-  eks_admin_iamrole_name = var.eks_admin_iamrole_name
-#   k8s_namespaces = var.k8s_namespaces
-  vpc_id = module.vpc.vpc_id
+  eks_node_groups_config  = var.eks_node_groups_config
+  eks_admin_iamrole_name  = var.eks_admin_iamrole_name
+  #   k8s_namespaces = var.k8s_namespaces
+  vpc_id                 = module.vpc.vpc_id
   vpc_private_subnet_ids = module.vpc.private_subnets
-  project_name = var.project_name
-  environment = var.environment
+  project_name           = var.project_name
+  environment            = var.environment
 }
 
 module "greencity_rds" {
-  source = "./rds"
-  rds_name = var.greencity_rds_name
-  vpc_id = module.vpc.vpc_id
-  database_name = var.greencity_database_name
-  database_username = var.greencity_database_username
-  database_password = var.greencity_database_password
-  database_engine = var.database_engine
-  database_engine_version = var.database_engine_version
-  database_port = var.database_port
-  database_instance_class = var.database_instance_class
-  database_storage_type = var.database_storage_type
-  database_storage_size = var.database_storage_size
-  database_max_storage_size = var.database_max_storage_size
-  database_maintenance_window = var.database_maintenance_window
-  database_backup_window = var.database_backup_window
-  database_subnet_group = module.vpc.database_subnet_group
-  database_cloudwatch_logs_exports = var.database_cloudwatch_logs_exports
+  source                             = "./rds"
+  rds_name                           = var.greencity_rds_name
+  vpc_id                             = module.vpc.vpc_id
+  database_name                      = var.greencity_database_name
+  database_username                  = var.greencity_database_username
+  database_password                  = var.greencity_database_password
+  database_engine                    = var.database_engine
+  database_engine_version            = var.database_engine_version
+  database_port                      = var.database_port
+  database_instance_class            = var.database_instance_class
+  database_storage_type              = var.database_storage_type
+  database_storage_size              = var.database_storage_size
+  database_max_storage_size          = var.database_max_storage_size
+  database_maintenance_window        = var.database_maintenance_window
+  database_backup_window             = var.database_backup_window
+  database_subnet_group              = module.vpc.database_subnet_group
+  database_cloudwatch_logs_exports   = var.database_cloudwatch_logs_exports
   eks_worker_nodes_security_group_id = module.custom_eks.eks_worker_nodes_security_group_id
-  project_name = var.project_name
-  environment = var.environment
+  project_name                       = var.project_name
+  environment                        = var.environment
 }
 
 module "sonarqube_rds" {
-  source = "./rds"
-  rds_name = var.sonarqube_rds_name
-  vpc_id = module.vpc.vpc_id
-  database_name = var.sonarqube_database_name
-  database_username = var.sonarqube_database_username
-  database_password = var.sonarqube_database_password
-  database_engine = var.database_engine
-  database_engine_version = var.database_engine_version
-  database_port = var.database_port
-  database_instance_class = var.database_instance_class
-  database_storage_type = var.database_storage_type
-  database_storage_size = var.database_storage_size
-  database_max_storage_size = var.database_max_storage_size
-  database_maintenance_window = var.database_maintenance_window
-  database_backup_window = var.database_backup_window
-  database_subnet_group = module.vpc.database_subnet_group
-  database_cloudwatch_logs_exports = var.database_cloudwatch_logs_exports
+  source                             = "./rds"
+  rds_name                           = var.sonarqube_rds_name
+  vpc_id                             = module.vpc.vpc_id
+  database_name                      = var.sonarqube_database_name
+  database_username                  = var.sonarqube_database_username
+  database_password                  = var.sonarqube_database_password
+  database_engine                    = var.database_engine
+  database_engine_version            = var.database_engine_version
+  database_port                      = var.database_port
+  database_instance_class            = var.database_instance_class
+  database_storage_type              = var.database_storage_type
+  database_storage_size              = var.database_storage_size
+  database_max_storage_size          = var.database_max_storage_size
+  database_maintenance_window        = var.database_maintenance_window
+  database_backup_window             = var.database_backup_window
+  database_subnet_group              = module.vpc.database_subnet_group
+  database_cloudwatch_logs_exports   = var.database_cloudwatch_logs_exports
   eks_worker_nodes_security_group_id = module.custom_eks.eks_worker_nodes_security_group_id
-  project_name = "greencity_sonarqube"
-  environment = var.environment
+  project_name                       = "greencity_sonarqube"
+  environment                        = var.environment
 }
 
 # module "nexus_rds" {
@@ -196,7 +196,7 @@ resource "aws_ssm_parameter" "database_host" {
   description = "Demo database host"
   type        = "SecureString"
   key_id      = aws_kms_key.ssm_param_encrypt_key.id
-  value = module.greencity_rds.db_instance_address
+  value       = module.greencity_rds.db_instance_address
 
   tags = {
     Name        = join("_", [var.project_name, "database_host"])
@@ -391,8 +391,8 @@ resource "aws_ssm_parameter" "google_creds_json" {
   description = "Greencity google-creds json"
   type        = "SecureString"
   key_id      = aws_kms_key.ssm_param_encrypt_key.id
-#   value       = file("${path.module}/../../secrets/backend/google-creds.json")
-  value       = var.google_creds_json	
+  #   value       = file("${path.module}/../../secrets/backend/google-creds.json")
+  value = var.google_creds_json
 
   tags = {
     Name        = join("_", [var.project_name, "google_creds_json"])
@@ -467,14 +467,14 @@ resource "aws_ssm_parameter" "argocd_repo_password" {
 module "eks_extra" {
   source = "./eks_extra"
 
-  cluster_name = var.eks_cluster_name
-  k8s_namespaces = var.k8s_namespaces
-  domain_name = var.domain_name
+  cluster_name      = var.eks_cluster_name
+  k8s_namespaces    = var.k8s_namespaces
+  domain_name       = var.domain_name
   oidc_provider_arn = module.custom_eks.oidc_provider_arn
   parameter_arns = [
-    aws_ssm_parameter.database_host.arn, 
-    aws_ssm_parameter.database_name.arn, 
-    aws_ssm_parameter.database_username.arn, 
+    aws_ssm_parameter.database_host.arn,
+    aws_ssm_parameter.database_name.arn,
+    aws_ssm_parameter.database_username.arn,
     aws_ssm_parameter.database_password.arn,
     aws_ssm_parameter.google_creds_json.arn,
     aws_ssm_parameter.api_key.arn,
@@ -490,35 +490,35 @@ module "eks_extra" {
     aws_ssm_parameter.argocd_repo_username.arn,
     aws_ssm_parameter.argocd_repo_password.arn
   ]
-  kms_key_arns = [ aws_kms_key.ssm_param_encrypt_key.arn ]
+  kms_key_arns = [aws_kms_key.ssm_param_encrypt_key.arn]
 
   datadog_api_key = var.datadog_api_key
-  datadog_site = var.datadog_site
+  datadog_site    = var.datadog_site
 
-  grafana_admin_user = var.grafana_admin_user
+  grafana_admin_user     = var.grafana_admin_user
   grafana_admin_password = var.grafana_admin_password
 
-#   sonarqube_domain_name = var.sonarqube_domain_name
-#   sonarqube_ssl_certificate_arn = var.sonarqube_ssl_certificate_arn
+  #   sonarqube_domain_name = var.sonarqube_domain_name
+  #   sonarqube_ssl_certificate_arn = var.sonarqube_ssl_certificate_arn
   sonarqube_db_instance_address = module.sonarqube_rds.db_instance_address
-  sonarqube_database_name = var.sonarqube_database_name
-  sonarqube_database_username = var.sonarqube_database_username
-  sonarqube_database_password = var.sonarqube_database_password
+  sonarqube_database_name       = var.sonarqube_database_name
+  sonarqube_database_username   = var.sonarqube_database_username
+  sonarqube_database_password   = var.sonarqube_database_password
 
   artifactory_database_password = var.artifactory_database_password
 
-#   nexus_db_instance_address = module.nexus_rds.db_instance_address
-#   nexus_database_name = var.nexus_database_name
-#   nexus_database_username = var.nexus_database_username
-#   nexus_database_password = var.nexus_database_password
-  artifactory_domain_name = var.artifactory_domain_name
+  #   nexus_db_instance_address = module.nexus_rds.db_instance_address
+  #   nexus_database_name = var.nexus_database_name
+  #   nexus_database_username = var.nexus_database_username
+  #   nexus_database_password = var.nexus_database_password
+  artifactory_domain_name         = var.artifactory_domain_name
   artifactory_ssl_certificate_arn = var.artifactory_ssl_certificate_arn
-#   nexus_ui_password = var.nexus_ui_password
+  #   nexus_ui_password = var.nexus_ui_password
 
-#   depends_on = [ module.custom_eks.cluster_name]
-  depends_on = [ module.custom_eks
-                #  ,
-                #  module.sonarqube_rds
-               ]
-#   depends_on = [ module.custom_eks.eks_managed_node_groups ]
+  #   depends_on = [ module.custom_eks.cluster_name]
+  depends_on = [module.custom_eks
+    #  ,
+    #  module.sonarqube_rds
+  ]
+  #   depends_on = [ module.custom_eks.eks_managed_node_groups ]
 }

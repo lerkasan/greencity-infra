@@ -1,6 +1,6 @@
 data "aws_eks_cluster" "default" {
-	name = var.eks_cluster_name
-#   name = module.custom_eks.cluster_name
+  name = var.eks_cluster_name
+  #   name = module.custom_eks.cluster_name
 }
 
 resource "kubernetes_annotations" "default-storageclass" {
@@ -27,7 +27,7 @@ resource "kubernetes_manifest" "argocd_external_secrets_service_account" {
       namespace = "argocd"
       annotations = {
         "eks.amazonaws.com/role-arn" = var.external_secrets_irsa_role_arn
-	  }
+      }
     }
   }
 }
@@ -39,15 +39,15 @@ resource "kubernetes_manifest" "external_cluster_secret_store" {
     kind       = "ClusterSecretStore"
 
     metadata = {
-      name      = "cluster-secretstore"
-    #   namespace = "default"
+      name = "cluster-secretstore"
+      #   namespace = "default"
     }
 
     spec = {
       provider = {
         aws = {
           service = "ParameterStore"
-          region = var.aws_region
+          region  = var.aws_region
           auth = {
             jwt = {
               serviceAccountRef = {
@@ -70,7 +70,7 @@ resource "kubernetes_manifest" "argocd_external_secret" {
     metadata = {
       name      = "argocd-external-secrets"
       namespace = "argocd"
-      labels    = {
+      labels = {
         "argocd.argoproj.io/secret-type" = "repository"
       }
     }
@@ -82,7 +82,7 @@ resource "kubernetes_manifest" "argocd_external_secret" {
         kind = "ClusterSecretStore"
       }
       target = {
-        name = "github-repo-for-greencity-helm"
+        name           = "github-repo-for-greencity-helm"
         creationPolicy = "Owner"
       }
       data = [
@@ -109,7 +109,7 @@ resource "kubernetes_manifest" "argocd_external_secret" {
   }
 
   depends_on = [
-    kubernetes_manifest.external_cluster_secret_store 
+    kubernetes_manifest.external_cluster_secret_store
   ]
 }
 
@@ -126,7 +126,7 @@ resource "kubernetes_manifest" "argocd_application_backcore" {
 
     spec = {
       project = "default"
-      source  = {
+      source = {
         repoURL        = var.greencity_helm_repo_url
         path           = var.greencity_backcore_chart_name
         targetRevision = "HEAD"
@@ -135,7 +135,7 @@ resource "kubernetes_manifest" "argocd_application_backcore" {
         namespace = "argocd"
         server    = "https://kubernetes.default.svc"
       }
-      syncPolicy  = {
+      syncPolicy = {
         automated = {
           prune    = "true"
           selfHeal = "true"
@@ -163,7 +163,7 @@ resource "kubernetes_manifest" "argocd_application_backuser" {
 
     spec = {
       project = "default"
-      source  = {
+      source = {
         repoURL        = var.greencity_helm_repo_url
         path           = var.greencity_backuser_chart_name
         targetRevision = "HEAD"
@@ -172,7 +172,7 @@ resource "kubernetes_manifest" "argocd_application_backuser" {
         namespace = "argocd"
         server    = "https://kubernetes.default.svc"
       }
-      syncPolicy  = {
+      syncPolicy = {
         automated = {
           prune    = "true"
           selfHeal = "true"
@@ -200,7 +200,7 @@ resource "kubernetes_manifest" "argocd_application_frontend" {
 
     spec = {
       project = "default"
-      source  = {
+      source = {
         repoURL        = var.greencity_helm_repo_url
         path           = var.greencity_frontend_chart_name
         targetRevision = "HEAD"
@@ -209,7 +209,7 @@ resource "kubernetes_manifest" "argocd_application_frontend" {
         namespace = "argocd"
         server    = "https://kubernetes.default.svc"
       }
-      syncPolicy  = {
+      syncPolicy = {
         automated = {
           prune    = "true"
           selfHeal = "true"
@@ -235,26 +235,26 @@ resource "kubernetes_manifest" "argocd_ingress" {
       namespace = "argocd"
       annotations = {
         "alb.ingress.kubernetes.io/load-balancer-name" = "argocd-ingress-alb"
-        "alb.ingress.kubernetes.io/target-type" = "ip"
-        "alb.ingress.kubernetes.io/scheme" = "internet-facing"
-        "alb.ingress.kubernetes.io/group.name" = "argocd-ingress-group"
-        "alb.ingress.kubernetes.io/backend-protocol" = "HTTPS"
-        "alb.ingress.kubernetes.io/listen-ports" = "[{\"HTTPS\":443}]"
-        "alb.ingress.kubernetes.io/certificate-arn"= var.argocd_ssl_cert_arn
-        "external-dns.alpha.kubernetes.io/hostname" = var.argocd_hostname
+        "alb.ingress.kubernetes.io/target-type"        = "ip"
+        "alb.ingress.kubernetes.io/scheme"             = "internet-facing"
+        "alb.ingress.kubernetes.io/group.name"         = "argocd-ingress-group"
+        "alb.ingress.kubernetes.io/backend-protocol"   = "HTTPS"
+        "alb.ingress.kubernetes.io/listen-ports"       = "[{\"HTTPS\":443}]"
+        "alb.ingress.kubernetes.io/certificate-arn"    = var.argocd_ssl_cert_arn
+        "external-dns.alpha.kubernetes.io/hostname"    = var.argocd_hostname
       }
     }
 
     spec = {
       ingressClassName = "alb"
-      tls  = [{
-        hosts = [ var.argocd_hostname ]
+      tls = [{
+        hosts = [var.argocd_hostname]
       }]
       rules = [{
         host = var.argocd_hostname
         http = {
           paths = [{
-            path = "/"
+            path     = "/"
             pathType = "Prefix"
             backend = {
               service = {
@@ -283,26 +283,26 @@ resource "kubernetes_manifest" "sonarqube_ingress" {
       namespace = "sonarqube"
       annotations = {
         "alb.ingress.kubernetes.io/load-balancer-name" = "sonarqube-ingress-alb"
-        "alb.ingress.kubernetes.io/target-type" = "ip"
-        "alb.ingress.kubernetes.io/scheme" = "internet-facing"
-        "alb.ingress.kubernetes.io/group.name" = "sonarqube-ingress-group"
-        "alb.ingress.kubernetes.io/backend-protocol" = "HTTP"
-        "alb.ingress.kubernetes.io/listen-ports" = "[{\"HTTPS\":443}]"
-        "alb.ingress.kubernetes.io/certificate-arn"= var.sonarqube_ssl_cert_arn
-        "external-dns.alpha.kubernetes.io/hostname" = var.sonarqube_hostname
+        "alb.ingress.kubernetes.io/target-type"        = "ip"
+        "alb.ingress.kubernetes.io/scheme"             = "internet-facing"
+        "alb.ingress.kubernetes.io/group.name"         = "sonarqube-ingress-group"
+        "alb.ingress.kubernetes.io/backend-protocol"   = "HTTP"
+        "alb.ingress.kubernetes.io/listen-ports"       = "[{\"HTTPS\":443}]"
+        "alb.ingress.kubernetes.io/certificate-arn"    = var.sonarqube_ssl_cert_arn
+        "external-dns.alpha.kubernetes.io/hostname"    = var.sonarqube_hostname
       }
     }
 
     spec = {
       ingressClassName = "alb"
-      tls  = [{
-        hosts = [ var.sonarqube_hostname ]
+      tls = [{
+        hosts = [var.sonarqube_hostname]
       }]
       rules = [{
         host = var.sonarqube_hostname
         http = {
           paths = [{
-            path = "/"
+            path     = "/"
             pathType = "Prefix"
             backend = {
               service = {
@@ -331,26 +331,26 @@ resource "kubernetes_manifest" "grafana_ingress" {
       namespace = "monitoring"
       annotations = {
         "alb.ingress.kubernetes.io/load-balancer-name" = "grafana-ingress-alb"
-        "alb.ingress.kubernetes.io/target-type" = "ip"
-        "alb.ingress.kubernetes.io/scheme" = "internet-facing"
-        "alb.ingress.kubernetes.io/group.name" = "grafana-ingress-group"
-        "alb.ingress.kubernetes.io/backend-protocol" = "HTTP"
-        "alb.ingress.kubernetes.io/listen-ports" = "[{\"HTTPS\":443}]"
-        "alb.ingress.kubernetes.io/certificate-arn"= var.grafana_ssl_cert_arn
-        "external-dns.alpha.kubernetes.io/hostname" = var.grafana_hostname
+        "alb.ingress.kubernetes.io/target-type"        = "ip"
+        "alb.ingress.kubernetes.io/scheme"             = "internet-facing"
+        "alb.ingress.kubernetes.io/group.name"         = "grafana-ingress-group"
+        "alb.ingress.kubernetes.io/backend-protocol"   = "HTTP"
+        "alb.ingress.kubernetes.io/listen-ports"       = "[{\"HTTPS\":443}]"
+        "alb.ingress.kubernetes.io/certificate-arn"    = var.grafana_ssl_cert_arn
+        "external-dns.alpha.kubernetes.io/hostname"    = var.grafana_hostname
       }
     }
 
     spec = {
       ingressClassName = "alb"
-      tls  = [{
-        hosts = [ var.grafana_hostname ]
+      tls = [{
+        hosts = [var.grafana_hostname]
       }]
       rules = [{
         host = var.grafana_hostname
         http = {
           paths = [{
-            path = "/"
+            path     = "/"
             pathType = "Prefix"
             backend = {
               service = {

@@ -1,102 +1,102 @@
 variable "aws_region" {
-  description   = "AWS region"
-  type          = string
-  default       = "us-east-1"
+  description = "AWS region"
+  type        = string
+  default     = "us-east-1"
 }
 
 variable "project_name" {
-  description   = "Project name"
-  type          = string
-  default       = "greencity"
+  description = "Project name"
+  type        = string
+  default     = "greencity"
 }
 
 variable "environment" {
-  description   = "Environment: dev/stage/prod"
-  type          = string
-  default       = "prod"
+  description = "Environment: dev/stage/prod"
+  type        = string
+  default     = "prod"
 }
 
 variable "state_s3_bucket_name" {
-  description   = "Terraform state S3 bucket"
-  type          = string
-  default       = "greencity-terraform-state"
+  description = "Terraform state S3 bucket"
+  type        = string
+  default     = "greencity-terraform-state"
 }
 
 # -------------- Network parameters ----------------
 
 variable "availability_zones" {
-  description   = "availability zones"
-  type          = list(string)
-  default       = ["us-east-1a", "us-east-1b"]
+  description = "availability zones"
+  type        = list(string)
+  default     = ["us-east-1a", "us-east-1b"]
 }
 
 variable "vpc_name" {
-  description   = "VPC name"
-  type          = string
-  default       = ""
+  description = "VPC name"
+  type        = string
+  default     = ""
 }
 
 variable "vpc_cidr" {
-  description   = "VPC CIDR"
-  type          = string
-  default       = "10.0.0.0/16"
+  description = "VPC CIDR"
+  type        = string
+  default     = "10.0.0.0/16"
 }
 
 variable "public_subnets" {
-  description   = "public subnets"
-  type          = list(string)
-  default       = ["10.0.10.0/24", "10.0.10.0/24"]
+  description = "public subnets"
+  type        = list(string)
+  default     = ["10.0.10.0/24", "10.0.10.0/24"]
 }
 
 variable "private_subnets" {
-  description   = "private subnets"
-  type          = list(string)
-  default       = ["10.0.20.0/24", "10.0.20.0/24"]
+  description = "private subnets"
+  type        = list(string)
+  default     = ["10.0.20.0/24", "10.0.20.0/24"]
 }
 
 variable "database_subnets" {
-  description   = "database subnets"
-  type          = list(string)
-  default       = ["10.0.30.0/24", "10.0.30.0/24"]
+  description = "database subnets"
+  type        = list(string)
+  default     = ["10.0.30.0/24", "10.0.30.0/24"]
 }
 
 variable "domain_name" {
-  description   = "Domain name"
-  type          = string
-  default       = "lerkasan.net"
+  description = "Domain name"
+  type        = string
+  default     = "lerkasan.net"
 }
 
 
 # -------------- ECR parameters --------------------
 
 variable "ecr_repository_names" {
-  description   = "ECR repository names"
-  type          = list(string)
-  default       = []
+  description = "ECR repository names"
+  type        = list(string)
+  default     = []
 }
 
 variable "ecr_repository_type" {
-  description   = "ECR repository type"
-  type          = string
-  default       = "private"
+  description = "ECR repository type"
+  type        = string
+  default     = "private"
 }
 
 variable "ecr_repository_scan_type" {
-  description   = "ecr_repository_scan_type (BASIC or ENHANCED)"
-  type          = string
-  default       = "BASIC"
+  description = "ecr_repository_scan_type (BASIC or ENHANCED)"
+  type        = string
+  default     = "BASIC"
 }
 
 variable "ecr_images_limit" {
-  description   = "Number of images to keep in an ECR repository"
-  type          = number
-  default       = 5
+  description = "Number of images to keep in an ECR repository"
+  type        = number
+  default     = 5
 }
 
 variable "ecr_user_name" {
-  description   = "A name of a use with access to ECR"
-  type          = string
-  default       = "" # "greencity-ecr-push"
+  description = "A name of a use with access to ECR"
+  type        = string
+  default     = "" # "greencity-ecr-push"
 }
 
 # -------------- Database parameters ---------------
@@ -182,23 +182,23 @@ variable "sonarqube_database_password" {
 # }
 
 variable "artifactory_domain_name" {
-  description   = "Nexus domain name"
-  type          = string
-  default       = ""
+  description = "Nexus domain name"
+  type        = string
+  default     = ""
 }
 
 variable "artifactory_ssl_certificate_arn" {
-  description   = "nexus SSL Certificate ARN"
-  type          = string
-  default       = ""
+  description = "nexus SSL Certificate ARN"
+  type        = string
+  default     = ""
 }
 
 
 variable "artifactory_database_password" {
-  description   = "Artifactory database password"
-  type          = string
-  default       = ""
-  sensitive     = true
+  description = "Artifactory database password"
+  type        = string
+  default     = ""
+  sensitive   = true
 }
 
 
@@ -362,91 +362,91 @@ variable "helm_repo_password" {
 # ------------------ EKS parameters -----------------
 
 variable "eks_cluster_name" {
-  description   = "EKS cluster name"
-  type          = string
-  default       = ""
+  description = "EKS cluster name"
+  type        = string
+  default     = ""
 }
 
 variable "eks_cluster_version" {
-  description   = "EKS cluster version"
-  type          = string
-  default       = "1.29"
+  description = "EKS cluster version"
+  type        = string
+  default     = "1.29"
 }
 
 variable "eks_node_ami_type" {
-  description   = "EKS node AMI type"
-  type          = string
-  default       = "AL2_x86_64"
+  description = "EKS node AMI type"
+  type        = string
+  default     = "AL2_x86_64"
 }
 
 variable "eks_node_disk_size" {
-  description   = "EKS node disk size"
-  type          = number
-  default       = 20
+  description = "EKS node disk size"
+  type        = number
+  default     = 20
 }
 
 variable "eks_node_instance_types" {
-  description   = "EKS cluster version"
-  type          = list(string)
-  default       = [ "t3.medium", "t3.small" ]
+  description = "EKS cluster version"
+  type        = list(string)
+  default     = ["t3.medium", "t3.small"]
 }
 
 variable "eks_node_groups_config" {
   type = map(object({
     desired_size   = number,
     min_size       = number,
-	max_size       = number,
+    max_size       = number,
     labels         = map(string)
-	instance_types = list(string)
-	capacity_type  = string
+    instance_types = list(string)
+    capacity_type  = string
   }))
   default = {}
 }
 
 variable "eks_admin_iamrole_name" {
-  description   = "EKS admin IAM role name"
-  type          = string
-  default       = "eks-admin"
+  description = "EKS admin IAM role name"
+  type        = string
+  default     = "eks-admin"
 }
 
 variable "k8s_namespaces" {
-  description   = "k8s namespaces"
-  type          = list(string)
-  default       = []
+  description = "k8s namespaces"
+  type        = list(string)
+  default     = []
 }
 
 variable "ssm_parameters" {
-  type = map(string)
+  type      = map(string)
   sensitive = true
-  default = {}
+  default   = {}
 }
 
 # -------------- Datadog -----------------
 
 variable "datadog_api_key" {
-  description   = "Datadog API key"
-  type          = string
-  default       = ""
-  sensitive     = true
+  description = "Datadog API key"
+  type        = string
+  default     = ""
+  sensitive   = true
 }
 
 variable "datadog_site" {
-  description   = "Datadog site"
-  type          = string
-  default       = ""
+  description = "Datadog site"
+  type        = string
+  default     = ""
 }
 
 
 variable "grafana_admin_user" {
-  description   = "Grafana admin user"
-  type          = string
-  default       = ""
-  sensitive     = true
+  description = "Grafana admin user"
+  type        = string
+  default     = ""
+  sensitive   = true
 }
 
 variable "grafana_admin_password" {
-  description   = "Grafana admin password"
-  type          = string
-  default       = ""
-  sensitive     = true
+  description = "Grafana admin password"
+  type        = string
+  default     = ""
+  sensitive   = true
 }
