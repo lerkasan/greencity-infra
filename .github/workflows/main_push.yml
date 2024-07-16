@@ -64,13 +64,13 @@ jobs:
 
       - name: Terraform format
         run: |
-          terraform -chdir=infra -check fmt
-          terraform -chdir=k8s_addons -check fmt
+          terraform -chdir=infra fmt -check
+          terraform -chdir=k8s_addons fmt -check
     
       - name: Terraform validate
         run: |
-          terraform -chdir=infra -no-color validate 
-          terraform -chdir=k8s_addons -no-color validate 
+          terraform -chdir=infra validate -no-color 
+          terraform -chdir=k8s_addons validate -no-color 
 
       - name: Run Checkov action
         id: checkov
@@ -107,14 +107,14 @@ jobs:
           infracost upload --path=infracost.json || echo "Always pass main branch runs even if there are policy failures"
 
       - name: Terraform plan Infrastructure
-        run: terraform -chdir=infra -no-color -input=false plan
+        run: terraform -chdir=infra plan -no-color -input=false 
 
       - name: Terraform plan k8s addons
-        run: terraform -chdir=k8s_addons -no-color -input=false plan
+        run: terraform -chdir=k8s_addons plan -no-color -input=false
 
     #   - name: Terraform apply Infrastructure
-    #     run: terraform -chdir=infra -auto-approve -input=false apply
+    #     run: terraform -chdir=infra apply -auto-approve -input=false
 
     #   - name: Terraform apply k8s addons
-    #     run: terraform -chdir=k8s_addons -auto-approve -input=false apply
+    #     run: terraform -chdir=k8s_addons apply -auto-approve -input=false apply
 
