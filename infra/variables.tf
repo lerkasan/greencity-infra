@@ -149,7 +149,17 @@ variable "sonarqube_database_password" {
   sensitive   = true
 }
 
+variable "sonarqube_current_admin_password" {
+  description = "SonarQube current default password"
+  type        = string
+  sensitive   = true
+}
 
+variable "sonarqube_admin_password" {
+  description = "SonarQube changed password"
+  type        = string
+  sensitive   = true
+}
 
 # variable "nexus_rds_name" {
 #   description = "The name of the RDS instance"
@@ -440,13 +450,11 @@ variable "datadog_site" {
 variable "grafana_admin_user" {
   description = "Grafana admin user"
   type        = string
-  default     = ""
   sensitive   = true
 }
 
 variable "grafana_admin_password" {
   description = "Grafana admin password"
   type        = string
-  default     = ""
   sensitive   = true
 }

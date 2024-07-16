@@ -376,11 +376,28 @@ resource "helm_release" "artifactory" {
   namespace  = "artifactory-oss"
   version    = "107.84.16"
 
+  timeout = 600
+
   create_namespace = true
 
-  set {
+  set_sensitive {
     name  = "artifactory.postgresql.postgresqlPassword"
     value = var.artifactory_database_password
+  }
+
+  set_sensitive {
+    name  = "artifactory.artifactory.admin.ip"
+    value = var.artifactory_ui_ip
+  }
+
+  set_sensitive {
+    name  = "artifactory.artifactory.admin.username"
+    value = var.artifactory_ui_username
+  }
+
+  set_sensitive {
+    name  = "artifactory.artifactory.admin.password"
+    value = var.artifactory_ui_password
   }
 
   set {
@@ -444,7 +461,7 @@ resource "helm_release" "artifactory" {
   #     value = "443"
   #   }
 
-  set {
+  set_sensitive {
     name  = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/certificate-arn"
     value = var.artifactory_ssl_certificate_arn
   }

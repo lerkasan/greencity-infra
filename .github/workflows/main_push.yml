@@ -16,6 +16,11 @@ env:
   TF_VAR_sonarqube_database_name: ${{ secrets.SONARQUBE_DATABASE_NAME }}
   TF_VAR_sonarqube_database_username: ${{ secrets.SONARQUBE_DATABASE_USERNAME }}
   TF_VAR_sonarqube_database_password: ${{ secrets.SONARQUBE_DATABASE_PASSWORD }}
+  TF_VAR_sonarqube_current_admin_password: ${{ secrets.SONARQUBE_CURRENT_ADMIN_PASSWORD }}
+  TF_VAR_sonarqube_admin_password: ${{ secrets.SONARQUBE_ADMIN_PASSWORD }}
+  TF_VAR_artifactory_ui_ip: ${{ secrets.ARTIFACTORY_UI_IP }}
+  TF_VAR_artifactory_ui_username: ${{ secrets.ARTIFACTORY_UI_USERNAME }}
+  TF_VAR_artifactory_ui_password: ${{ secrets.ARTIFACTORY_UI_PASSWORD }}
   TF_VAR_artifactory_database_password: ${{ secrets.ARTIFACTORY_DATABASE_PASSWORD }}
   TF_VAR_datadog_api_key: ${{ secrets.DATADOG_API_KEY }}
   TF_VAR_grafana_admin_user: ${{ secrets.GRAFANA_ADMIN_USER }}

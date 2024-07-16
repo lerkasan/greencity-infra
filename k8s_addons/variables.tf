@@ -83,6 +83,27 @@ variable "artifactory_database_password" {
   sensitive   = true
 }
 
+variable "artifactory_ui_ip" {
+  description = "Artifactory ip address to access UI"
+  type        = string
+  default     = ""
+  sensitive   = true
+}
+
+variable "artifactory_ui_username" {
+  description = "Artifactory UI username"
+  type        = string
+  default     = ""
+  sensitive   = true
+}
+
+variable "artifactory_ui_password" {
+  description = "Artifactory UI password"
+  type        = string
+  default     = ""
+  sensitive   = true
+}
+
 variable "artifactory_domain_name" {
   description = "Nexus domain name"
   type        = string

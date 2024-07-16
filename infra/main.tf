@@ -500,10 +500,12 @@ module "eks_extra" {
 
   #   sonarqube_domain_name = var.sonarqube_domain_name
   #   sonarqube_ssl_certificate_arn = var.sonarqube_ssl_certificate_arn
-  sonarqube_db_instance_address = module.sonarqube_rds.db_instance_address
-  sonarqube_database_name       = var.sonarqube_database_name
-  sonarqube_database_username   = var.sonarqube_database_username
-  sonarqube_database_password   = var.sonarqube_database_password
+  sonarqube_db_instance_address    = module.sonarqube_rds.db_instance_address
+  sonarqube_database_name          = var.sonarqube_database_name
+  sonarqube_database_username      = var.sonarqube_database_username
+  sonarqube_database_password      = var.sonarqube_database_password
+  sonarqube_current_admin_password = var.sonarqube_current_admin_password
+  sonarqube_admin_password         = var.sonarqube_admin_password
 
   #   artifactory_database_password = var.artifactory_database_password
 

@@ -37,56 +37,60 @@ variable "kms_key_arns" {
 variable "datadog_api_key" {
   description   = "Datadog API key"
   type          = string
-  default       = ""
   sensitive     = true
 }
 
 variable "datadog_site" {
   description   = "Datadog site"
   type          = string
-  default       = ""
   sensitive     = true
 }
 
 variable "grafana_admin_user" {
   description   = "Grafana admin user"
   type          = string
-  default       = ""
   sensitive     = true
 }
 
 variable "grafana_admin_password" {
   description   = "Grafana admin password"
   type          = string
-  default       = ""
   sensitive     = true
 }
 
 variable "sonarqube_db_instance_address" {
   description   = "SonarQube DB instance address"
   type          = string
-  default       = ""
   sensitive     = true
 }
 
 variable "sonarqube_database_name" {
   description   = "SonarQube database name"
   type          = string
-  default       = ""
   sensitive     = true
 }
 
 variable "sonarqube_database_username" {
   description   = "SonarQube database username"
   type          = string
-  default       = ""
   sensitive     = true
 }
 
 variable "sonarqube_database_password" {
   description   = "SonarQube database password"
   type          = string
-  default       = ""
+  sensitive     = true
+}
+
+variable "sonarqube_current_admin_password" {
+  description   = "SonarQube current default password"
+  type          = string
+  sensitive     = true
+}
+
+variable "sonarqube_admin_password" {
+  description   = "SonarQube changed password"
+  type          = string
   sensitive     = true
 }
 

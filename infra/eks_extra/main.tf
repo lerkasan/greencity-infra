@@ -350,7 +350,7 @@ resource "helm_release" "sonarqube" {
   version    = "10.6.0"
   namespace  = "sonarqube"
 
-  timeout = "360"
+  timeout = "600"
 
 #   set {
 #     name = "edition"
@@ -372,19 +372,29 @@ resource "helm_release" "sonarqube" {
     value = "true"
   }
 
-  set {
+  set_sensitive {
     name = "jdbcOverwrite.jdbcUrl"
     value = join("", ["jdbc:postgresql://", var.sonarqube_db_instance_address, ":5432/", var.sonarqube_database_name])
   }
 
-  set {
+  set_sensitive {
     name = "jdbcOverwrite.jdbcUsername"
     value = var.sonarqube_database_username
   }
 
-  set {
+  set_sensitive {
     name = "jdbcOverwrite.jdbcPassword"
     value = var.sonarqube_database_password
+  }
+
+  set_sensitive {
+    name = "account.currentAdminPassword"
+    value = var.sonarqube_current_admin_password
+  }
+
+  set_sensitive {
+    name = "account.adminPassword"
+    value = var.sonarqube_admin_password
   }
 
 #   set {
