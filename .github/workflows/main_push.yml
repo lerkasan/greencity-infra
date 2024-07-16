@@ -1,0 +1,71 @@
+name: CI/CD GreenCity Infrastructure
+
+on:
+  push:
+    branches:
+      - main
+
+# for debugging purposes
+  workflow_dispatch:
+
+env:
+  AWS_REGION: 'us-east-1'
+  TF_VAR_database_name: ${{ secrets.DATABASE_NAME }}
+  TF_VAR_database_username: ${{ secrets.DATABASE_USERNAME }}
+  TF_VAR_database_password: ${{ secrets.DATABASE_PASSWORD }}
+
+jobs:
+
+  test:
+    name: Run Frontend Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout infrastructure repository
+        uses: actions/checkout@98637d7db679cd12b4ae373378e391551b922539                           # v3.5.3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502      # v4.0.2
+        with:
+          role-to-assume: ${{ secrets.TERRAFORM_ROLE }}
+          role-session-name: GitHub-Actions-Terraform-Greencity-${{ github.sha }}-${{ github.run_id}}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform with specified version on the runner
+        uses: hashicorp/setup-terraform@651471c36a6092792c552e8b1bef71e592b462d8                  # v3.1.1
+        with:
+          terraform_version: 1.9.2
+    
+      - name: Terraform init
+        run: terraform init
+
+      - name: Terraform format
+        run: terraform fmt -check
+    
+      - name: Terraform validate
+        run: terraform validate -no-color
+
+      - name: Setup Infracost
+        uses: infracost/actions/setup@d5dd739fb5eae81f31bf09fea5c290186a91964a                   # v3.0.0
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
+
+      - name: Run Infracost on default branch and update Infracost Cloud
+        run: |
+          infracost breakdown --path .
+          infracost breakdown --path=. --format=json --out-file=infracost.json
+          infracost upload --path=infracost.json || echo "Always pass main branch runs even if there are policy failures"
+
+      - name: Scan with GitLeaks
+        uses: gitleaks/gitleaks-action@44c470ffc35caa8b1eb3e8012ca53c2f9bea4eb5                  # v2.3.6
+
+      - name: Terraform plan
+        run: terraform plan -no-color -input=false
+        # env:
+        #   TF_VAR_database_name: ${{ secrets.DATABASE_NAME }}
+        #   TF_VAR_database_username: ${{ secrets.DATABASE_USERNAME }}
+        #   TF_VAR_database_password: ${{ secrets.DATABASE_PASSWORD }}
+
+    #   - name: Terraform apply
+    #     run: terraform apply -auto-approve -input=false
+
+
