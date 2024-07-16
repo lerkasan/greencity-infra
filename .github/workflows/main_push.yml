@@ -123,5 +123,5 @@ jobs:
         run: terraform -chdir=k8s_addons plan -no-color -input=false
 
       - name: Terraform apply k8s addons
-        run: terraform -chdir=k8s_addons apply -auto-approve -input=false apply
+        run: terraform -chdir=k8s_addons apply -auto-approve -input=false
 
