@@ -64,9 +64,9 @@ jobs:
           terraform -chdir=infra init
           terraform -chdir=k8s_addons init
 
-      - name: Terraform destroy k8s_addons
-        run: |
-          terraform -chdir=k8s_addons destroy -auto-approve -input=false
+    #   - name: Terraform destroy k8s_addons
+    #     run: |
+    #       terraform -chdir=k8s_addons destroy -auto-approve -input=false
 
       - name: Terraform destroy infra
         run: |
