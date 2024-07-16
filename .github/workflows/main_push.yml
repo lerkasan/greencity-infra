@@ -10,9 +10,28 @@ on:
 
 env:
   AWS_REGION: 'us-east-1'
-  TF_VAR_database_name: ${{ secrets.DATABASE_NAME }}
-  TF_VAR_database_username: ${{ secrets.DATABASE_USERNAME }}
-  TF_VAR_database_password: ${{ secrets.DATABASE_PASSWORD }}
+  TF_VAR_greencity_database_name: ${{ secrets.GREENCITY_DATABASE_NAME }}
+  TF_VAR_greencity_database_username: ${{ secrets.GREENCITY_DATABASE_USERNAME }}
+  TF_VAR_greencity_database_password: ${{ secrets.GREENCITY_DATABASE_PASSWORD }}
+  TF_VAR_sonarqube_database_name: ${{ secrets.SONARQUBE_DATABASE_NAME }}
+  TF_VAR_sonarqube_database_username: ${{ secrets.SONARQUBE_DATABASE_USERNAME }}
+  TF_VAR_sonarqube_database_password: ${{ secrets.SONARQUBE_DATABASE_PASSWORD }}
+  TF_VAR_artifactory_database_password: ${{ secrets.ARTIFACTORY_DATABASE_PASSWORD }}
+  TF_VAR_datadog_api_key: ${{ secrets.DATADOG_API_KEY }}
+  TF_VAR_grafana_admin_user: ${{ secrets.GRAFANA_ADMIN_USER }}
+  TF_VAR_grafana_admin_password: ${{ secrets.GRAFANA_ADMIN_PASSWORD }}
+  TF_VAR_api_key: ${{ secrets.API_KEY }}
+  TF_VAR_api_secret: ${{ secrets.API_SECRET }}
+  TF_VAR_azure_connection_string: ${{ secrets.AZURE_CONNECTION_STRING }}
+  TF_VAR_email_address: ${{ secrets.EMAIL_ADDRESS }}
+  TF_VAR_email_password: ${{ secrets.EMAIL_PASSWORD }}
+  TF_VAR_google_api_key: ${{ secrets.GOOGLE_API_KEY }}
+  TF_VAR_google_client_id: ${{ secrets.GOOGLE_CLIENT_ID }}
+  TF_VAR_google_client_id_manager: ${{ secrets.GOOGLE_CLIENT_ID_MANAGER }}
+  TF_VAR_token_key: ${{ secrets.TOKEN_KEY }}
+  TF_VAR_helm_repo_username: ${{ secrets.HELM_REPO_USERNAME }}
+  TF_VAR_helm_repo_password: ${{ secrets.HELM_REPO_PASSWORD }}
+  TF_VAR_google_creds_json: ${{ secrets.GOOGLE_CREDS_JSON }}
 
 jobs:
 
@@ -34,15 +53,44 @@ jobs:
         uses: hashicorp/setup-terraform@651471c36a6092792c552e8b1bef71e592b462d8                  # v3.1.1
         with:
           terraform_version: 1.9.2
-    
+
       - name: Terraform init
-        run: terraform init
+        run: |
+          terraform -chdir=infra init
+          terraform -chdir=k8s_addons init
 
       - name: Terraform format
-        run: terraform fmt -check
+        run: |
+          terraform -chdir=infra -check fmt
+          terraform -chdir=k8s_addons -check fmt
     
       - name: Terraform validate
-        run: terraform validate -no-color
+        run: |
+          terraform -chdir=infra -no-color validate 
+          terraform -chdir=k8s_addons -no-color validate 
+
+      - name: Run Checkov action
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: .
+          quiet: true
+          soft_fail: true
+          download_external_modules: false
+
+      - name: Run Trivy vulnerability scanner in fs mode
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'config'
+          hide-progress: true
+        #   format: 'sarif'
+        #   output: 'trivy-results.sarif'
+        #   exit-code: '1'
+          ignore-unfixed: false
+          severity: 'CRITICAL,HIGH'
+
+      - name: Scan with GitLeaks
+        uses: gitleaks/gitleaks-action@44c470ffc35caa8b1eb3e8012ca53c2f9bea4eb5                  # v2.3.6
 
       - name: Setup Infracost
         uses: infracost/actions/setup@d5dd739fb5eae81f31bf09fea5c290186a91964a                   # v3.0.0
@@ -55,17 +103,15 @@ jobs:
           infracost breakdown --path=. --format=json --out-file=infracost.json
           infracost upload --path=infracost.json || echo "Always pass main branch runs even if there are policy failures"
 
-      - name: Scan with GitLeaks
-        uses: gitleaks/gitleaks-action@44c470ffc35caa8b1eb3e8012ca53c2f9bea4eb5                  # v2.3.6
+      - name: Terraform plan Infrastructure
+        run: terraform -chdir=infra -no-color -input=false plan
 
-      - name: Terraform plan
-        run: terraform plan -no-color -input=false
-        # env:
-        #   TF_VAR_database_name: ${{ secrets.DATABASE_NAME }}
-        #   TF_VAR_database_username: ${{ secrets.DATABASE_USERNAME }}
-        #   TF_VAR_database_password: ${{ secrets.DATABASE_PASSWORD }}
+      - name: Terraform plan k8s addons
+        run: terraform -chdir=k8s_addons -no-color -input=false plan
 
-    #   - name: Terraform apply
-    #     run: terraform apply -auto-approve -input=false
+    #   - name: Terraform apply Infrastructure
+    #     run: terraform -chdir=infra -auto-approve -input=false apply
 
+    #   - name: Terraform apply k8s addons
+    #     run: terraform -chdir=k8s_addons -auto-approve -input=false apply
 

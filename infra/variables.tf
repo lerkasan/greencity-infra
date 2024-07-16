@@ -344,7 +344,6 @@ variable "google_creds_json" {
 variable "helm_repo_url" {
   description = "helm repo url"
   type        = string
-  sensitive   = true
 }
 
 variable "helm_repo_username" {
@@ -435,7 +434,6 @@ variable "datadog_site" {
   description   = "Datadog site"
   type          = string
   default       = ""
-  sensitive     = true
 }
 
 

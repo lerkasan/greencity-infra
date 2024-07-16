@@ -79,3 +79,6 @@ database_max_storage_size = 10
 database_maintenance_window = "Sun:02:00-Sun:04:00"
 database_backup_window = "00:30-02:00"
 database_cloudwatch_logs_exports = [ "postgresql" ]
+
+datadog_site = "datadoghq.com"
+helm_repo_url = "https://github.com/lerkasan/greencity-helm"
