@@ -64,70 +64,70 @@ jobs:
           terraform -chdir=infra init
           terraform -chdir=k8s_addons init
 
-    #   - name: Terraform destroy k8s_addons
-    #     run: |
-    #       terraform -chdir=k8s_addons destroy -auto-approve -input=false
-
-    #   - name: Terraform destroy infra
-    #     run: |
-    #       terraform -chdir=infra destroy -auto-approve -input=false
-
-
-      - name: Terraform format
+      - name: Terraform destroy k8s_addons
         run: |
-          terraform -chdir=infra fmt -check
-          terraform -chdir=k8s_addons fmt -check
+          terraform -chdir=k8s_addons destroy -auto-approve -input=false
+
+      - name: Terraform destroy infra
+        run: |
+          terraform -chdir=infra destroy -auto-approve -input=false
+
+
+    #   - name: Terraform format
+    #     run: |
+    #       terraform -chdir=infra fmt -check
+    #       terraform -chdir=k8s_addons fmt -check
     
-      - name: Terraform validate
-        run: |
-          terraform -chdir=infra validate -no-color 
-          terraform -chdir=k8s_addons validate -no-color 
+    #   - name: Terraform validate
+    #     run: |
+    #       terraform -chdir=infra validate -no-color 
+    #       terraform -chdir=k8s_addons validate -no-color 
 
-      - name: Run Checkov action
-        id: checkov
-        uses: bridgecrewio/checkov-action@master
-        with:
-          directory: .
-          quiet: true
-          soft_fail: true
-          download_external_modules: false
+    #   - name: Run Checkov action
+    #     id: checkov
+    #     uses: bridgecrewio/checkov-action@master
+    #     with:
+    #       directory: .
+    #       quiet: true
+    #       soft_fail: true
+    #       download_external_modules: false
 
-      - name: Run Trivy vulnerability scanner in fs mode
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'config'
-          hide-progress: true
-        #   format: 'sarif'
-        #   output: 'trivy-results.sarif'
-        #   exit-code: '1'
-          ignore-unfixed: false
-          severity: 'CRITICAL,HIGH'
+    #   - name: Run Trivy vulnerability scanner in fs mode
+    #     uses: aquasecurity/trivy-action@master
+    #     with:
+    #       scan-type: 'config'
+    #       hide-progress: true
+    #     #   format: 'sarif'
+    #     #   output: 'trivy-results.sarif'
+    #     #   exit-code: '1'
+    #       ignore-unfixed: false
+    #       severity: 'CRITICAL,HIGH'
 
-    #   - name: Scan with GitLeaks
-    #     uses: gitleaks/gitleaks-action@44c470ffc35caa8b1eb3e8012ca53c2f9bea4eb5                  # v2.3.
-    #     env:
-    #       GITLEAKS_ENABLE_UPLOAD_ARTIFACT: false
+    # #   - name: Scan with GitLeaks
+    # #     uses: gitleaks/gitleaks-action@44c470ffc35caa8b1eb3e8012ca53c2f9bea4eb5                  # v2.3.
+    # #     env:
+    # #       GITLEAKS_ENABLE_UPLOAD_ARTIFACT: false
 
-      - name: Setup Infracost
-        uses: infracost/actions/setup@d5dd739fb5eae81f31bf09fea5c290186a91964a                   # v3.0.0
-        with:
-          api-key: ${{ secrets.INFRACOST_API_KEY }}
+    #   - name: Setup Infracost
+    #     uses: infracost/actions/setup@d5dd739fb5eae81f31bf09fea5c290186a91964a                   # v3.0.0
+    #     with:
+    #       api-key: ${{ secrets.INFRACOST_API_KEY }}
 
-      - name: Run Infracost on default branch and update Infracost Cloud
-        run: |
-          infracost breakdown --path .
-          infracost breakdown --path=. --format=json --out-file=infracost.json
-          infracost upload --path=infracost.json || echo "Always pass main branch runs even if there are policy failures"
+    #   - name: Run Infracost on default branch and update Infracost Cloud
+    #     run: |
+    #       infracost breakdown --path .
+    #       infracost breakdown --path=. --format=json --out-file=infracost.json
+    #       infracost upload --path=infracost.json || echo "Always pass main branch runs even if there are policy failures"
 
-      - name: Terraform plan Infrastructure
-        run: terraform -chdir=infra plan -no-color -input=false 
+    #   - name: Terraform plan Infrastructure
+    #     run: terraform -chdir=infra plan -no-color -input=false 
 
-      - name: Terraform apply Infrastructure
-        run: terraform -chdir=infra apply -auto-approve -input=false || terraform -chdir=infra apply -auto-approve -input=false
+    #   - name: Terraform apply Infrastructure
+    #     run: terraform -chdir=infra apply -auto-approve -input=false || terraform -chdir=infra apply -auto-approve -input=false
 
-      - name: Terraform plan k8s addons
-        run: terraform -chdir=k8s_addons plan -no-color -input=false
+    #   - name: Terraform plan k8s addons
+    #     run: terraform -chdir=k8s_addons plan -no-color -input=false
 
-      - name: Terraform apply k8s addons
-        run: terraform -chdir=k8s_addons apply -auto-approve -input=false
+    #   - name: Terraform apply k8s addons
+    #     run: terraform -chdir=k8s_addons apply -auto-approve -input=false
 
