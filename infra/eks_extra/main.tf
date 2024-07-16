@@ -526,6 +526,7 @@ resource "helm_release" "argocd" {
 #     value = "nlb"
 #   }
 #   depends_on = [ module.custom_eks.eks_aws_auth ]
+  depends_on = [ helm_release.aws_load_balancer_controller, kubernetes_namespace.greencity["argocd"] ]
 }
 
 
