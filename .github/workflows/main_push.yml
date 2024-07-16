@@ -111,12 +111,12 @@ jobs:
       - name: Terraform plan Infrastructure
         run: terraform -chdir=infra plan -no-color -input=false 
 
+      - name: Terraform apply Infrastructure
+        run: terraform -chdir=infra apply -auto-approve -input=false || terraform -chdir=infra apply -auto-approve -input=false
+
       - name: Terraform plan k8s addons
         run: terraform -chdir=k8s_addons plan -no-color -input=false
 
-    #   - name: Terraform apply Infrastructure
-    #     run: terraform -chdir=infra apply -auto-approve -input=false
-
-    #   - name: Terraform apply k8s addons
-    #     run: terraform -chdir=k8s_addons apply -auto-approve -input=false apply
+      - name: Terraform apply k8s addons
+        run: terraform -chdir=k8s_addons apply -auto-approve -input=false apply
 
