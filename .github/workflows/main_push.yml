@@ -35,9 +35,12 @@ env:
 
 jobs:
 
-  test:
-    name: Run Frontend Unit Tests
+  infra:
+    name: Validate and provision infrastructure
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write       # For GitHub OIDC Token
     steps:
       - name: Checkout infrastructure repository
         uses: actions/checkout@98637d7db679cd12b4ae373378e391551b922539                           # v3.5.3
