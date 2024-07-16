@@ -13,5 +13,5 @@ greencity_backcore_chart_name = "greencity-backcore"
 greencity_backuser_chart_name = "greencity-backuser"
 greencity_frontend_chart_name = "greencity-frontend"
 
-artifactory_domain_name          = "artifactory.lerkasan.net"
-artifactory_ssl_certificate_arn  = "arn:aws:acm:us-east-1:084912621610:certificate/062578ed-1924-40d6-ba48-8e2bc3444e14"
+artifactory_domain_name         = "artifactory.lerkasan.net"
+artifactory_ssl_certificate_arn = "arn:aws:acm:us-east-1:084912621610:certificate/062578ed-1924-40d6-ba48-8e2bc3444e14"

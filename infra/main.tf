@@ -505,14 +505,14 @@ module "eks_extra" {
   sonarqube_database_username   = var.sonarqube_database_username
   sonarqube_database_password   = var.sonarqube_database_password
 
-#   artifactory_database_password = var.artifactory_database_password
+  #   artifactory_database_password = var.artifactory_database_password
 
   #   nexus_db_instance_address = module.nexus_rds.db_instance_address
   #   nexus_database_name = var.nexus_database_name
   #   nexus_database_username = var.nexus_database_username
   #   nexus_database_password = var.nexus_database_password
-#   artifactory_domain_name         = var.artifactory_domain_name
-#   artifactory_ssl_certificate_arn = var.artifactory_ssl_certificate_arn
+  #   artifactory_domain_name         = var.artifactory_domain_name
+  #   artifactory_ssl_certificate_arn = var.artifactory_ssl_certificate_arn
   #   nexus_ui_password = var.nexus_ui_password
 
   #   depends_on = [ module.custom_eks.cluster_name]

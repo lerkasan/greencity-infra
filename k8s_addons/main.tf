@@ -414,45 +414,45 @@ resource "helm_release" "artifactory" {
   }
 
   set {
-    name = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/load-balancer-name"
+    name  = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/load-balancer-name"
     value = "artifactory-ingress-alb"
   }
 
   set {
-    name = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/target-type"
+    name  = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/target-type"
     value = "ip"
   }
 
   set {
-    name = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/scheme"
+    name  = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/scheme"
     value = "internet-facing"
   }
 
   set {
-    name = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/backend-protocol"
+    name  = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/backend-protocol"
     value = "HTTP"
   }
 
   set {
-    name = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/listen-ports"
+    name  = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/listen-ports"
     value = "[{\"HTTPS\":443}]"
-	# value = "[{\"HTTP\":9000}, {\"HTTPS\":443}]"
+    # value = "[{\"HTTP\":9000}, {\"HTTPS\":443}]"
   }
 
-#   set {
-#     name = "ingress.annotations.alb\\.ingress\\.kubernetes\\.io/ssl-redirect"
-#     value = "443"
-#   }
+  #   set {
+  #     name = "ingress.annotations.alb\\.ingress\\.kubernetes\\.io/ssl-redirect"
+  #     value = "443"
+  #   }
 
   set {
-    name = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/certificate-arn"
+    name  = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/certificate-arn"
     value = var.artifactory_ssl_certificate_arn
   }
 
   set {
-    name = "artifactory.ingress.annotations.external-dns\\.alpha\\.kubernetes\\.io/hostname"
+    name  = "artifactory.ingress.annotations.external-dns\\.alpha\\.kubernetes\\.io/hostname"
     value = var.artifactory_domain_name
   }
 
-  depends_on = [ kubernetes_annotations.default-storageclass ]
+  depends_on = [kubernetes_annotations.default-storageclass]
 }
