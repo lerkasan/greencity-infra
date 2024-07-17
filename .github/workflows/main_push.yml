@@ -123,6 +123,7 @@ jobs:
 
   provision:
     name: Provision infrastructure
+    needs: validate
     runs-on: ubuntu-latest
     permissions:
       contents: read
