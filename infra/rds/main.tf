@@ -9,7 +9,7 @@ module "rds" {
   engine                = var.database_engine
   engine_version        = var.database_engine_version
   instance_class        = var.database_instance_class
-  storage_type          = var.database_storage_type # "gp2"
+  storage_type          = var.database_storage_type
   allocated_storage     = var.database_storage_size
   max_allocated_storage = var.database_max_storage_size
 
@@ -17,9 +17,6 @@ module "rds" {
   username  = var.database_username
   password  = var.database_password
 
-#   db_name   = aws_ssm_parameter.database_name.value
-#   username  = aws_ssm_parameter.database_username.value
-#   password  = aws_ssm_parameter.database_password.value
 #   iam_database_authentication_enabled = true
 
   manage_master_user_password =false
@@ -30,11 +27,6 @@ module "rds" {
   maintenance_window = var.database_maintenance_window
   backup_window      = var.database_backup_window
 
-#   monitoring_interval    = "30"
-#   monitoring_role_name   = "GreenCityRDSMonitoringRole"
-#   create_monitoring_role = true
-
-#   create_cloudwatch_log_group = true
   enabled_cloudwatch_logs_exports = var.database_cloudwatch_logs_exports
 
   create_db_option_group    = false
@@ -42,8 +34,7 @@ module "rds" {
 
   # DB subnet group
   create_db_subnet_group = false
-  db_subnet_group_name   = var.database_subnet_group # module.vpc.database_subnet_group
-#   subnet_ids             = [module.vpc.database_subnets]
+  db_subnet_group_name   = var.database_subnet_group
 
   vpc_security_group_ids = [ aws_security_group.database.id ]
 
@@ -64,7 +55,7 @@ module "rds" {
 resource "aws_security_group" "database" {
   name        = join("_", [var.project_name, "_db_security_group"])
   description = "Demo security group for database"
-  vpc_id      =  var.vpc_id # module.vpc.vpc_id
+  vpc_id      =  var.vpc_id
 
   tags = {
     Name        = join("_", [var.project_name, "_database_sg"])
@@ -81,7 +72,7 @@ resource "aws_security_group_rule" "database_allow_inbound_from_appserver" {
   to_port                  = module.rds.db_instance_port
   protocol                 = "tcp"
 
-  source_security_group_id = var.eks_worker_nodes_security_group_id # module.custom_eks.eks_worker_nodes_security_group_id
+  source_security_group_id = var.eks_worker_nodes_security_group_id
   security_group_id        = aws_security_group.database.id
 }
 

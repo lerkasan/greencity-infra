@@ -22,4 +22,3 @@ output "eks_worker_nodes_security_group_id" {
   value       = aws_security_group.eks_worker_nodes.id
   description = "EKS worker nodes security group id"
 }
-

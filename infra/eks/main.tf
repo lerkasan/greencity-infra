@@ -1,107 +1,30 @@
 data "aws_caller_identity" "current" {}
 
-# # https://github.com/terraform-aws-modules/terraform-aws-eks/issues/2009
-# data "aws_eks_cluster" "default" {
-#   name = module.eks.cluster_name
-
-#   depends_on = [ module.eks ]
-# }
-
-# data "aws_eks_cluster_auth" "default" {
-#   name = module.eks.cluster_name
-
-#   depends_on = [ module.eks ]
-# }
-
-# data "aws_eks_cluster" "default" {
-#   name = module.eks.cluster_name
-#   depends_on = [
-#     module.eks.eks_managed_node_groups,
-#   ]
-# }
-
-# data "aws_eks_cluster_auth" "default" {
-#   name = module.eks.cluster_name
-#   depends_on = [
-#     module.eks.eks_managed_node_groups,
-#   ]
-# }
-
 module "eks" {
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-eks.git?ref=d7aea4ca6b7d5fa08c70bf67fa5e9e5c514d26d2"   # commit hash for version 20.17.2
 #   source  = "terraform-aws-modules/eks/aws"
 #   version = "20.17.2"
 
-  cluster_name    = var.eks_cluster_name     # "greencity-eks"
-  cluster_version = var.eks_cluster_version  #"1.29"
+  cluster_name    = var.eks_cluster_name
+  cluster_version = var.eks_cluster_version
 
-  cluster_endpoint_private_access = true  # ?
+  cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
   enable_cluster_creator_admin_permissions = true
 
-  vpc_id     = var.vpc_id           # module.vpc.vpc_id
-  subnet_ids = var.vpc_private_subnet_ids  # module.vpc.private_subnets
-#   control_plane_subnet_ids = var.vpc_private_subnet_ids
-#   control_plane_subnet_ids = module.vpc.intra_subnets
-
-#   cluster_additional_security_group_ids = [aws_security_group.eks_worker_nodes.id]
+  vpc_id     = var.vpc_id
+  subnet_ids = var.vpc_private_subnet_ids
 
   enable_irsa = true
 
   eks_managed_node_group_defaults = {
-    ami_type               = var.eks_node_ami_type   # "AL2_x86_64" 	# "AL2023_x86_64_STANDARD"  or "AL2_x86_64"
-    disk_size              = var.eks_node_disk_size  # 20
-    instance_types         = var.eks_node_instance_types # ["t3.medium", "t3.small"]
+    ami_type               = var.eks_node_ami_type
+    disk_size              = var.eks_node_disk_size
+    instance_types         = var.eks_node_instance_types
     vpc_security_group_ids = [ aws_security_group.eks_worker_nodes.id ]
   }
 
   eks_managed_node_groups = var.eks_node_groups_config
-#   {
-    # one = {
-    #   desired_size = 4
-    #   min_size     = 2
-    #   max_size     = 8
-
-    #   labels = {
-    #     role = "general"
-    #   }
-
-    #   instance_types = var.eks_node_instance_types #  [ t3.small, t3.medium ]
-    #   capacity_type  = "ON_DEMAND"
-    # }
-
-	# two = {
-    #   desired_size = 4
-    #   min_size     = 2
-    #   max_size     = 8
-
-    #   labels = {
-    #     role = "general"
-    #   }
-
-    #   instance_types = var.eks_node_instance_types  # [ t3.small, t3.medium ]
-    #   capacity_type  = "ON_DEMAND"
-    # }
-
-    # spot = {
-    #   desired_size = 1
-    #   min_size     = 1
-    #   max_size     = 10
-
-    #   labels = {
-    #     role = "spot"
-    #   }
-
-    #   taints = [{
-    #     key    = "market"
-    #     value  = "spot"
-    #     effect = "NO_SCHEDULE"
-    #   }]
-
-    #   instance_types = ["t3.small"] # t3.micro
-    #   capacity_type  = "SPOT"
-    # }
-#   }
 
   cluster_addons = {
     aws-ebs-csi-driver = {
@@ -126,8 +49,8 @@ module "eks_auth" {
 
   aws_auth_roles = [
     {
-	  rolearn  = module.eks_admins_iam_role.iam_role_arn
-	  username = module.eks_admins_iam_role.iam_role_name
+      rolearn  = module.eks_admins_iam_role.iam_role_arn
+      username = module.eks_admins_iam_role.iam_role_name
       groups   = ["system:masters"]
     }
   ]
@@ -149,7 +72,7 @@ module "allow_eks_access_iam_policy" {
       {
         Action = [
           "eks:*",
-		  "ec2:*"
+          "ec2:*"
         ]
         Effect   = "Allow"
         Resource = "*"
@@ -212,16 +135,6 @@ module "irsa-ebs-csi" {
   role_policy_arns              = [data.aws_iam_policy.ebs_csi_policy.arn]
   oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
 }
-
-# resource "kubernetes_namespace" "greencity" {
-#   for_each = toset(var.k8s_namespaces)
-
-#   metadata {
-#     name = each.key
-#   }
-
-#   depends_on = [ module.eks ]
-# }
 
 resource "aws_security_group" "eks_worker_nodes" {
   name        = join("_", [var.project_name, "_eks_worker_node_security_group"])

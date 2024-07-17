@@ -96,7 +96,7 @@ variable "ecr_images_limit" {
 variable "ecr_user_name" {
   description = "A name of a use with access to ECR"
   type        = string
-  default     = "" # "greencity-ecr-push"
+  default     = ""
 }
 
 # -------------- Database parameters ---------------
@@ -161,36 +161,6 @@ variable "sonarqube_admin_password" {
   sensitive   = true
 }
 
-# variable "nexus_rds_name" {
-#   description = "The name of the RDS instance"
-#   type        = string
-#   default     = "greencity-database"
-# }
-
-# variable "nexus_database_name" {
-#   description = "Database name variable passed through a file secrets.tfvars or an environment variable TF_database_name"
-#   type        = string
-#   sensitive   = true
-# }
-
-# variable "nexus_database_username" {
-#   description = "Database username variable passed through a file secrets.tfvars or environment variable TF_database_username"
-#   type        = string
-#   sensitive   = true
-# }
-
-# variable "nexus_database_password" {
-#   description = "Database password variable passed through a file secrets.tfvars or environment variable TF_database_password"
-#   type        = string
-#   sensitive   = true
-# }
-
-# variable "nexus_ui_password" {
-#   description = "Nexus UI password variable passed through a file secrets.tfvars or environment variable TF_database_password"
-#   type        = string
-#   sensitive   = true
-# }
-
 variable "artifactory_domain_name" {
   description = "Nexus domain name"
   type        = string
@@ -210,19 +180,6 @@ variable "artifactory_database_password" {
   default     = ""
   sensitive   = true
 }
-
-
-# variable "sonarqube_domain_name" {
-#   description   = "SonarQube domain name"
-#   type          = string
-#   default       = ""
-# }
-
-# variable "sonarqube_ssl_certificate_arn" {
-#   description   = "SonarQube SSL certificate ARN"
-#   type          = string
-#   default       = ""
-# }
 
 variable "database_engine" {
   description = "database engine"

@@ -1,6 +1,5 @@
 data "aws_eks_cluster" "default" {
   name = var.eks_cluster_name
-  #   name = module.custom_eks.cluster_name
 }
 
 resource "kubernetes_annotations" "default-storageclass" {
@@ -40,7 +39,6 @@ resource "kubernetes_manifest" "external_cluster_secret_store" {
 
     metadata = {
       name = "cluster-secretstore"
-      #   namespace = "default"
     }
 
     spec = {
@@ -453,13 +451,7 @@ resource "helm_release" "artifactory" {
   set {
     name  = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/listen-ports"
     value = "[{\"HTTPS\":443}]"
-    # value = "[{\"HTTP\":9000}, {\"HTTPS\":443}]"
   }
-
-  #   set {
-  #     name = "ingress.annotations.alb\\.ingress\\.kubernetes\\.io/ssl-redirect"
-  #     value = "443"
-  #   }
 
   set_sensitive {
     name  = "artifactory.ingress.annotations.alb\\.ingress\\.kubernetes\\.io/certificate-arn"

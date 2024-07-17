@@ -26,8 +26,8 @@ ecr_images_limit         = 5
 ecr_user_name            = "greencity-ecr-push"
 
 eks_cluster_name        = "greencity-eks"
-eks_cluster_version     = "1.30"                   # "1.29"
-eks_node_ami_type       = "AL2023_x86_64_STANDARD" # "AL2023_x86_64_STANDARD"  or "AL2_x86_64"
+eks_cluster_version     = "1.30"
+eks_node_ami_type       = "AL2023_x86_64_STANDARD" # "AL2023_x86_64_STANDARD" or "AL2_x86_64"
 eks_node_disk_size      = 20
 eks_node_instance_types = ["t3.medium", "t3.small"]
 eks_admin_iamrole_name  = "eks-admin"
@@ -63,12 +63,7 @@ eks_node_groups_config = {
 
 greencity_rds_name = "greencity"
 sonarqube_rds_name = "sonar"
-# nexus_rds_name = "nexus"
 
-# sonarqube_domain_name = "sonar.lerkasan.net"
-# sonarqube_ssl_certificate_arn = "arn:aws:acm:us-east-1:084912621610:certificate/feef84f4-f358-4ccb-88e1-a5d24ebd1da6"
-# artifactory_domain_name          = "artifactory.lerkasan.net"
-# artifactory_ssl_certificate_arn  = "arn:aws:acm:us-east-1:084912621610:certificate/062578ed-1924-40d6-ba48-8e2bc3444e14"
 database_engine                  = "postgres"
 database_engine_version          = "16"
 database_port                    = 5432

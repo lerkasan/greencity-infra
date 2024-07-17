@@ -13,7 +13,7 @@ variable "eks_cluster_version" {
 variable "eks_node_ami_type" {
   description   = "EKS node AMI type"
   type          = string
-  default       = "AL2023_x86_64_STANDARD"  # "AL2023_x86_64_STANDARD"  or "AL2_x86_64"
+  default       = "AL2023_x86_64_STANDARD"  # "AL2023_x86_64_STANDARD" or "AL2_x86_64"
 }
 
 variable "eks_node_disk_size" {
@@ -45,12 +45,6 @@ variable "eks_admin_iamrole_name" {
   type          = string
   default       = "eks-admin"
 }
-
-# variable "k8s_namespaces" {
-#   description   = "k8s namespaces"
-#   type          = list(string)
-#   default       = []
-# }
 
 variable "vpc_id" {
   description   = "VPC id"

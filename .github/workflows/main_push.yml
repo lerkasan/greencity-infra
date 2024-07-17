@@ -102,8 +102,6 @@ jobs:
         with:
           scan-type: 'config'
           hide-progress: true
-        #   format: 'sarif'
-        #   output: 'trivy-results.sarif'
         #   exit-code: '1'
           ignore-unfixed: false
           severity: 'CRITICAL,HIGH'
@@ -135,4 +133,3 @@ jobs:
 
       - name: Terraform apply k8s addons
         run: terraform -chdir=k8s_addons apply -auto-approve -input=false
-
