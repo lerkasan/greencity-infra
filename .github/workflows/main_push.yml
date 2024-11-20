@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'README.md'
+      - 'img/**'
 
 # for debugging purposes
   workflow_dispatch:
